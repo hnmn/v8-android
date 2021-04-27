@@ -50,8 +50,9 @@ jobs:
         ls -la
         ls build/
         cd ../
-        echo "target_os = ['android','linux']" >> .gclient
+        echo "target_os = ['android']" >> .gclient
         gclient sync
+        echo y | sudo /home/runner/work/v8-android/v8-android/v8/v8/build/install-build-deps-android.sh
         ls -la
         cat .gclient
     - name: Build V8
