@@ -37,6 +37,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get upgrade -y
+        sudo apt remove php7.4-common -y
         sudo apt-get install zip 
     - name: Get Resource
       run: |
