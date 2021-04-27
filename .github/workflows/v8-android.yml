@@ -52,7 +52,7 @@ jobs:
         ls build/
         cd ../
         echo "target_os = ['android']" >> .gclient
-        gclient sync
+        gclient sync -D --force --reset
         echo y | sudo /home/runner/work/v8-android/v8-android/v8/v8/build/install-build-deps-android.sh
         ls -la
         cat .gclient
@@ -61,3 +61,27 @@ jobs:
         export PATH="$PATH:$PWD/depot_tools"
         ls -la 
         pwd
+        cd /home/runner/work/v8-android/v8-android/v8/v8
+        alias gm=/home/runner/work/v8-android/v8-android/v8/v8/tools/dev/gm.py
+        gm android_arm64.release.all
+    - name: Zip SDK
+      run: |
+        cd /home/runner/work/v8-android/v8-android/v8/v8
+        ls
+        tar -czf v8-android.tar.gz /home/runner/work/v8-android/v8-android/v8/v8/out
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+    - name: Test with environment variables
+      run: echo $TAG_NAME - $RELEASE_TIME
+      env:
+          TAG_NAME: v8-android
+          RELEASE_TIME: ${{ steps.date.outputs.date }}
+    - name: Release v8 
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "/home/runner/work/v8-android/v8-android/v8/v8/v8-android.tar.gz"
+        tag: Dart-SDK-${{ steps.date.outputs.date }}
+        token: ${{ secrets.RELEASE_TOKEN }}
+        allowUpdates: true
+       
