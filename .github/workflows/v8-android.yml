@@ -38,7 +38,7 @@ jobs:
         sudo apt-get update
         sudo apt-get upgrade -y
         sudo apt remove php7.4-common -y
-        sudo apt-get install zip 
+        sudo apt-get install bzip2  
     - name: Get Resource
       run: |
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
@@ -47,7 +47,7 @@ jobs:
         cd v8
         fetch v8
         cd v8
-        git checkout 9.0.257.24
+        git checkout 9.1.269.17
         ls -la
         ls build/
         cd ../
@@ -63,12 +63,12 @@ jobs:
         pwd
         cd /home/runner/work/v8-android/v8-android/v8/v8
         ls -la
-        python /home/runner/work/v8-android/v8-android/v8/v8/tools/dev/gm.py android_arm64.release.all
-    - name: Zip SDK
+        python /home/runner/work/v8-android/v8-android/v8/v8/tools/dev/gm.py android_arm64.release.checkall
+    - name: pack v8
       run: |
         cd /home/runner/work/v8-android/v8-android/v8/v8
         ls
-        tar -czf v8-android.tar.gz /home/runner/work/v8-android/v8-android/v8/v8/out
+        tar -cjf v8-android.tar.bz2 out/
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
@@ -81,7 +81,7 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         artifacts: "/home/runner/work/v8-android/v8-android/v8/v8/v8-android.tar.gz"
-        tag: Dart-SDK-${{ steps.date.outputs.date }}
+        tag: v8-android-${{ steps.date.outputs.date }}
         token: ${{ secrets.RELEASE_TOKEN }}
         allowUpdates: true
        
