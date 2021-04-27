@@ -62,7 +62,8 @@ jobs:
         ls -la 
         pwd
         cd /home/runner/work/v8-android/v8-android/v8/v8
-        .tools/dev/gm.py android_arm64.release.all
+        ls -la
+        python /home/runner/work/v8-android/v8-android/v8/v8/tools/dev/gm.py android_arm64.release.all
     - name: Zip SDK
       run: |
         cd /home/runner/work/v8-android/v8-android/v8/v8
