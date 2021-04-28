@@ -63,7 +63,7 @@ jobs:
         pwd
         cd /home/runner/work/v8-android/v8-android/v8/v8
         ls -la
-        python /home/runner/work/v8-android/v8-android/v8/v8/tools/dev/gm.py android_arm64.release.checkall
+        python /home/runner/work/v8-android/v8-android/v8/v8/tools/dev/gm.py android_arm64.release 
     - name: pack v8
       run: |
         cd /home/runner/work/v8-android/v8-android/v8/v8
