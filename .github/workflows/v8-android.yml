@@ -80,7 +80,7 @@ jobs:
     - name: Release v8 
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "/home/runner/work/v8-android/v8-android/v8/v8/v8-android.tar.gz"
+        artifacts: "/home/runner/work/v8-android/v8-android/v8/v8/v8-android.tar.bz2"
         tag: v8-android-${{ steps.date.outputs.date }}
         token: ${{ secrets.RELEASE_TOKEN }}
         allowUpdates: true
