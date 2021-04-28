@@ -63,12 +63,22 @@ jobs:
         pwd
         cd /home/runner/work/v8-android/v8-android/v8/v8
         ls -la
-        python /home/runner/work/v8-android/v8-android/v8/v8/tools/dev/gm.py android_arm64.release --is_component_build=false
+        python /home/runner/work/v8-android/v8-android/v8/v8/tools/dev/v8gen.py arm64.release -vv -- '
+        target_os = "android"
+        target_cpu = "arm64"
+        v8_target_cpu = "arm64"
+        is_component_build = true
+        v8_enable_i18n_support = false
+        symbol_level = 1
+        '
+        ninja -C out.gn/arm64.release -t clean
+        ninja -C out.gn/arm64.release v8_libplatform
+        ninja -C out.gn/arm64.release v8
     - name: pack v8
       run: |
         cd /home/runner/work/v8-android/v8-android/v8/v8
         ls
-        tar -cjf v8-android.tar.bz2 out/
+        tar -cjf v8-android.tar.bz2 out.gn/ include/
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
