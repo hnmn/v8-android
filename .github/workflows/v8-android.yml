@@ -67,10 +67,11 @@ jobs:
         target_os = "android"
         target_cpu = "arm64"
         v8_target_cpu = "arm64"
-        is_component_build = false
+        is_component_build = true
         android_unstripped_runtime_outputs = false
         v8_use_external_startup_data = false
         v8_static_library = true
+        use_custom_libcxx=false
         v8_monolithic = true
         v8_enable_i18n_support = false
         v8_android_log_stdout = true
@@ -79,26 +80,24 @@ jobs:
         ninja -C out.gn/arm64.release -t clean
         ninja -C out.gn/arm64.release v8_libplatform
         ninja -C out.gn/arm64.release v8
-        ninja -C out.gn/arm64.release d8
-      
     - name: pack v8
       run: |
         cd /home/runner/work/v8-android/v8-android/v8/v8
         ls
-        tar -cjf v8-android-static-d8.tar.bz2 out.gn/ include/
+        tar -cjf v8-android-static.tar.bz2 out.gn/ include/
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
     - name: Test with environment variables
       run: echo $TAG_NAME - $RELEASE_TIME
       env:
-          TAG_NAME: v8-android-static
+          TAG_NAME: v8android-static
           RELEASE_TIME: ${{ steps.date.outputs.date }}
     - name: Release v8 
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "/home/runner/work/v8-android/v8-android/v8/v8/v8-android-static-d8.tar.bz2"
-        tag: v8-android-static${{ steps.date.outputs.date }}
+        artifacts: "/home/runner/work/v8-android/v8-android/v8/v8/v8-android-static.tar.bz2"
+        tag: v8android-static${{ steps.date.outputs.date }}
         token: ${{ secrets.RELEASE_TOKEN }}
        
 
