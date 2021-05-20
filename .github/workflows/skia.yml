@@ -63,8 +63,8 @@ jobs:
         ls -la 
         cd /home/runner/work/v8-android/v8-android/skia/skia
         ls -la
-        bin/gn gen out/arm64 --args='ndk="/tmp/ndk/android-ndk-r21d" target_cpu="arm64" is_official_build=true'
-        ninja -C out/arm64 -j 16
+        bin/gn gen out/arm64 --args='ndk="/tmp/ndk/android-ndk-r21d" extra_ldflags="-lexpat" extra_cflags="/usr/include" target_cpu="arm64" is_official_build=true'
+        ninja -C out/arm64 -j 16 -v
     - name: pack skia
       run: |
         cd /home/runner/work/v8-android/v8-android/skia/skia
