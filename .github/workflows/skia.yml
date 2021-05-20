@@ -47,7 +47,6 @@ jobs:
         python2 tools/git-sync-deps
         ls -la
         python2 infra/bots/assets/android_ndk_linux/download.py -t /tmp/ndk
-        echo y | sudo /home/runner/work/v8-android/v8-android/v8/v8/build/install-build-deps-android.sh
         ls -la
     - name: Build Skia
       run: |
