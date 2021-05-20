@@ -41,7 +41,7 @@ jobs:
         python-version: '2.x'
     - name: Prepare
       run: |
-        sudo apt-get install bzip2 libexpat-dev
+        sudo apt-get install bzip2 libexpat-dev g++-multilib libc6-dec
     - name: Get Resource
       run: |
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
