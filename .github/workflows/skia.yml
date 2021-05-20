@@ -60,7 +60,6 @@ jobs:
       run: |
         export PATH="$PATH:$PWD/depot_tools"
         ls -la 
-        android-ndk-r21d
         cd /home/runner/work/v8-android/v8-android/skia/skia
         ls -la
         bin/gn gen out/arm64 --args='ndk="/tmp/ndk" target_cpu="arm64" is_official_build=true'
