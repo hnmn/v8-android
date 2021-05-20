@@ -46,13 +46,14 @@ jobs:
         cd skia
         python2 tools/git-sync-deps
         ls -la
-        python2 infra/bots/assets/android_ndk_linux/download.py -t /tmp/ndk
+        curl https://dl.google.com/android/repository/android-ndk-r21d-linux-x86_64.zip -o ndk.zip
+        unzip ndk.zip -d /tmp/ndk
         ls -la
     - name: Build Skia
       run: |
         export PATH="$PATH:$PWD/depot_tools"
         ls -la 
-        pwd
+        android-ndk-r21d
         cd /home/runner/work/v8-android/v8-android/skia/skia
         ls -la
         bin/gn gen out/arm64 --args='ndk="/tmp/ndk" target_cpu="arm64" is_official_build=true'
