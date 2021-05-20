@@ -35,69 +35,47 @@ jobs:
         python-version: '2.x'
     - name: Prepare
       run: |
-        sudo apt-get update
-        sudo apt-get upgrade -y
-        sudo apt remove php7.4-common libpci3 -y
         sudo apt-get install bzip2  
     - name: Get Resource
       run: |
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
         export PATH="$PATH:$PWD/depot_tools"
-        mkdir v8
-        cd v8
-        fetch v8
-        cd v8
-        git checkout 9.1.269.17
+        mkdir skia
+        cd skia
+        fetch skia
+        cd skia
+        python2 tools/git-sync-deps
         ls -la
-        ls build/
-        cd ../
-        echo "target_os = ['android']" >> .gclient
-        gclient sync -D --force --reset
+        python2 infra/bots/assets/android_ndk_linux/download.py -t /tmp/ndk
         echo y | sudo /home/runner/work/v8-android/v8-android/v8/v8/build/install-build-deps-android.sh
         ls -la
-        cat .gclient
-    - name: Build V8
+    - name: Build Skia
       run: |
         export PATH="$PATH:$PWD/depot_tools"
         ls -la 
         pwd
-        cd /home/runner/work/v8-android/v8-android/v8/v8
+        cd /home/runner/work/v8-android/v8-android/skia/skia
         ls -la
-        python /home/runner/work/v8-android/v8-android/v8/v8/tools/dev/v8gen.py arm64.release -vv -- '
-        target_os = "android"
-        target_cpu = "arm64"
-        v8_target_cpu = "arm64"
-        is_component_build = false
-        android_unstripped_runtime_outputs = false
-        v8_use_external_startup_data = false
-        v8_static_library = true
-        use_custom_libcxx=false
-        v8_monolithic = true
-        v8_enable_i18n_support = false
-        v8_android_log_stdout = true
-        symbol_level = 0
-        '
-        ninja -C out.gn/arm64.release -t clean
-        ninja -C out.gn/arm64.release v8_libplatform
-        ninja -C out.gn/arm64.release v8
-    - name: pack v8
+        bin/gn gen out/arm64 --args='ndk="/tmp/ndk" target_cpu="arm64" is_official_build=true'
+        ninja -C out/arm64 -j 16
+    - name: pack skia
       run: |
-        cd /home/runner/work/v8-android/v8-android/v8/v8
+        cd /home/runner/work/v8-android/v8-android/skia/skia
         ls
-        tar -cjf v8-android-static.tar.bz2 out.gn/ include/
+        tar -cjf skia-android.tar.bz2 out/ include/
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
     - name: Test with environment variables
       run: echo $TAG_NAME - $RELEASE_TIME
       env:
-          TAG_NAME: v8android-static
+          TAG_NAME: android
           RELEASE_TIME: ${{ steps.date.outputs.date }}
     - name: Release v8 
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "/home/runner/work/v8-android/v8-android/v8/v8/v8-android-static.tar.bz2"
-        tag: v8android-static${{ steps.date.outputs.date }}
+        artifacts: "/home/runner/work/v8-android/v8-android/skia/skia/skia-android.tar.bz2"
+        tag: android${{ steps.date.outputs.date }}
         token: ${{ secrets.RELEASE_TOKEN }}
        
 
