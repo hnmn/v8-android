@@ -41,7 +41,7 @@ jobs:
         python-version: '2.x'
     - name: Prepare
       run: |
-        sudo apt-get install bzip2 libexpat-dev libc6-dev
+        sudo apt-get install bzip2 libexpat-dev libc6-dev-i386
     - name: Get Resource
       run: |
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
@@ -63,7 +63,7 @@ jobs:
         ls -la 
         cd /home/runner/work/v8-android/v8-android/skia/skia
         ls -la
-        bin/gn gen out/arm64 --args='ndk="/tmp/ndk/android-ndk-r21d" extra_ldflags=["-lexpat"] extra_cflags=["-I/usr/include"] target_cpu="arm64" is_official_build=false'
+        bin/gn gen out/arm64 --args='ndk="/tmp/ndk/android-ndk-r21d" target_cpu="arm64" skia_use_expat=false skia_use_freetype=false skia_use_fontconfig=false skia_use_harfbuzz=false skia_use_icu=false skia_use_libjpeg_turbo=false skia_use_libgifcodec=false skia_use_libwebp=false skia_use_libpng=false skia_use_piex=false skia_use_sfntly=false skia_use_zlib=false skia_use_xps=false is_official_build=false'
         ninja -C out/arm64 -j 2 -v
     - name: pack skia
       run: |
@@ -73,7 +73,7 @@ jobs:
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-    - name: Test with environment variables
+    - name: Test with environment variablesskia_use_foo
       run: echo $TAG_NAME - $RELEASE_TIME
       env:
           TAG_NAME: android
