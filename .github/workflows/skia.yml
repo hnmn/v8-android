@@ -19,10 +19,11 @@ jobs:
     - name: Maximize build space
       uses: easimon/maximize-build-space@v4
       with:
-          root-reserve-mb: 512   
+          root-reserve-mb: 1024   
           swap-size-mb: 1024
           remove-dotnet: 'true'
           remove-haskell: 'true'
+          remove-android: 'true'
     - name: Checkout
       uses: actions/checkout@v2
     - name: Echo Free space
@@ -35,8 +36,6 @@ jobs:
         python-version: '2.x'
     - name: Prepare
       run: |
-        sudo apt-get update
-        sudo apt-get upgrade -y
         sudo apt remove php7.4-common libpci3 -y
         sudo apt-get install bzip2  
     - name: Get Resource
